@@ -27,7 +27,8 @@
     
     // webView setup
     self.webView = [[WKWebView alloc] initWithFrame:CGRectMake(0, 100, 414, 762)];
-    
+    // Allow going page back/forward
+    self.webView.allowsBackForwardNavigationGestures = YES;
 
     
     // add to view
@@ -45,5 +46,70 @@
     NSURLRequest* request = [NSURLRequest requestWithURL:url];
     [self.webView loadRequest:request];
 }
+
+-(void)motionBegan:(UIEventSubtype)motion withEvent:(UIEvent *)event {
+    if (motion == UIEventSubtypeMotionShake) {
+        
+        UIAlertController* alert = [UIAlertController
+        alertControllerWithTitle:@"My Alert"
+        message:@"This is an alert."
+        preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+            style:UIAlertActionStyleDefault
+            handler:^(UIAlertAction * action) {
+            }];
+        
+        UIAlertAction* customUserAgentAction = [UIAlertAction actionWithTitle:@"Set UserAgent"
+            style:UIAlertActionStyleDefault
+            handler:^(UIAlertAction * action) {
+                [self setCustomUserAgent];
+            }];
+        
+        
+        UIAlertAction* screenshotAction = [UIAlertAction actionWithTitle:@"Screenshot"
+            style:UIAlertActionStyleDefault
+            handler:^(UIAlertAction * action) {
+                [self takeScreenshot];
+        }];
+        
+        UIAlertAction* refreshAction = [UIAlertAction actionWithTitle:@"Refresh"
+            style:UIAlertActionStyleDefault
+            handler:^(UIAlertAction * action) {
+                [self refreshPage];
+            }];
+        
+        [alert addAction:cancelAction];
+        [alert addAction:refreshAction];
+        [alert addAction:customUserAgentAction];
+        [alert addAction:screenshotAction];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+    }
+}
+
+
+-(void)takeScreenshot {
+    CGRect rect = CGRectMake(0, 100, 414, 762); // Size of webView
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    [self.webView.layer renderInContext:context];
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    // Save image to Photo Album
+    UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil);
+}
+
+-(void)refreshPage {
+    [self.webView reload];
+}
+
+-(void)setCustomUserAgent {
+    UIPasteboard* pasteBoard = [UIPasteboard generalPasteboard];
+    self.customUserAgent = pasteBoard.string;
+    NSLog(@"%@", self.customUserAgent);
+}
+
 
 @end

@@ -11,8 +11,21 @@
 
 @interface ViewController : UIViewController
 
+
+//PROPERTIES
 @property (strong, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (strong, nonatomic) WKWebView* webView;
+@property NSString* customUserAgent;
+@property BOOL useCustomUserAgent;
+
+
+//METHODS
+
+-(void)takeScreenshot;
+
+-(void)refreshPage;
+
+-(void)setCustomUserAgent;
 
 @end
 
