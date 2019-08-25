@@ -15,6 +15,7 @@
 //PROPERTIES
 @property (strong, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (strong, nonatomic) WKWebView* webView;
+@property WKWebViewConfiguration* config;
 @property NSString* customUserAgent;
 @property BOOL useCustomUserAgent;
 
@@ -27,5 +28,5 @@
 
 -(void)setCustomUserAgent;
 
-@end
 
+@end
