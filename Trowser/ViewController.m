@@ -8,7 +8,7 @@
 
 #import "ViewController.h"
 
-@interface ViewController () <UISearchBarDelegate>
+@interface ViewController () <UISearchBarDelegate, WKNavigationDelegate>
 
 @end
 
@@ -25,10 +25,15 @@
     self.searchBar.placeholder = @"URL or Search Query";
     self.searchBar.autocapitalizationType = NO;
     
+    //Incognito Mode
+    self.config = [WKWebViewConfiguration new];
+    self.config.websiteDataStore = [WKWebsiteDataStore nonPersistentDataStore];
+    
     // webView setup
-    self.webView = [[WKWebView alloc] initWithFrame:CGRectMake(0, 100, 414, 762)];
+    self.webView = [[WKWebView alloc] initWithFrame:CGRectMake(0, 100, 414, 762) configuration:self.config];
     // Allow going page back/forward
     self.webView.allowsBackForwardNavigationGestures = YES;
+    self.webView.navigationDelegate = self;
 
     
     // add to view
@@ -41,18 +46,26 @@
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    
+    if (self.customUserAgent != nil) {
+        self.webView.customUserAgent = self.customUserAgent;
+    }
+
     [self.searchBar resignFirstResponder];
     NSURL* url = [NSURL URLWithString:searchBar.text];
-    NSURLRequest* request = [NSURLRequest requestWithURL:url];
+    NSURLRequest* request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:5];
     [self.webView loadRequest:request];
+    [self.searchBar setText:self.webView.URL.absoluteString];
+
 }
+
 
 -(void)motionBegan:(UIEventSubtype)motion withEvent:(UIEvent *)event {
     if (motion == UIEventSubtypeMotionShake) {
         
         UIAlertController* alert = [UIAlertController
-        alertControllerWithTitle:@"My Alert"
-        message:@"This is an alert."
+        alertControllerWithTitle:@"Options"
+        message:nil
         preferredStyle:UIAlertControllerStyleAlert];
         
         UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
@@ -79,6 +92,7 @@
                 [self refreshPage];
             }];
         
+        
         [alert addAction:cancelAction];
         [alert addAction:refreshAction];
         [alert addAction:customUserAgentAction];
@@ -91,7 +105,7 @@
 
 -(void)takeScreenshot {
     CGRect rect = CGRectMake(0, 100, 414, 762); // Size of webView
-    UIGraphicsBeginImageContext(rect.size);
+    UIGraphicsBeginImageContextWithOptions(rect.size, self.view.opaque, 0.0);
     CGContextRef context = UIGraphicsGetCurrentContext();
     [self.webView.layer renderInContext:context];
     UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
@@ -107,8 +121,7 @@
 
 -(void)setCustomUserAgent {
     UIPasteboard* pasteBoard = [UIPasteboard generalPasteboard];
-    self.customUserAgent = pasteBoard.string;
-    NSLog(@"%@", self.customUserAgent);
+    self.customUserAgent = pasteBoard.string;;
 }
 
 
