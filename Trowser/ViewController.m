@@ -48,7 +48,7 @@
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
     
     if (self.customUserAgent != nil) {
-        self.webView.customUserAgent = self.customUserAgent;
+        self.webView.customUserAgent = self.customUserAgent; 
     }
 
     [self.searchBar resignFirstResponder];
