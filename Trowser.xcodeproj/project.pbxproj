@@ -13,6 +13,8 @@
 		5F0499C723115AF8007BD4FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F0499C623115AF8007BD4FE /* Assets.xcassets */; };
 		5F0499CA23115AF8007BD4FE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5F0499C823115AF8007BD4FE /* LaunchScreen.storyboard */; };
 		5F0499CD23115AF8007BD4FE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F0499CC23115AF8007BD4FE /* main.m */; };
+		5F6D4AC1231803BA00BC9CE8 /* forwardButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F6D4ABF231803BA00BC9CE8 /* forwardButton.png */; };
+		5F6D4AC2231803BA00BC9CE8 /* backButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F6D4AC0231803BA00BC9CE8 /* backButton.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +28,8 @@
 		5F0499C923115AF8007BD4FE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5F0499CB23115AF8007BD4FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5F0499CC23115AF8007BD4FE /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		5F6D4ABF231803BA00BC9CE8 /* forwardButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = forwardButton.png; path = ../../../../Downloads/forwardButton.png; sourceTree = "<group>"; };
+		5F6D4AC0231803BA00BC9CE8 /* backButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = backButton.png; path = ../../../../Downloads/backButton.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +62,8 @@
 		5F0499BC23115AF7007BD4FE /* Trowser */ = {
 			isa = PBXGroup;
 			children = (
+				5F6D4AC0231803BA00BC9CE8 /* backButton.png */,
+				5F6D4ABF231803BA00BC9CE8 /* forwardButton.png */,
 				5F0499BD23115AF7007BD4FE /* AppDelegate.h */,
 				5F0499BE23115AF7007BD4FE /* AppDelegate.m */,
 				5F0499C023115AF7007BD4FE /* ViewController.h */,
@@ -129,6 +135,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				5F0499CA23115AF8007BD4FE /* LaunchScreen.storyboard in Resources */,
+				5F6D4AC1231803BA00BC9CE8 /* forwardButton.png in Resources */,
+				5F6D4AC2231803BA00BC9CE8 /* backButton.png in Resources */,
 				5F0499C723115AF8007BD4FE /* Assets.xcassets in Resources */,
 				5F0499C523115AF7007BD4FE /* Main.storyboard in Resources */,
 			);
@@ -288,7 +296,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 49Z9MR24WT;
 				INFOPLIST_FILE = Trowser/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -306,7 +314,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 49Z9MR24WT;
 				INFOPLIST_FILE = Trowser/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -13,11 +13,19 @@
 
 
 //PROPERTIES
-@property (strong, nonatomic) IBOutlet UISearchBar *searchBar;
+@property (strong, nonatomic) IBOutlet UISearchBar* searchBar;
+@property (strong, nonatomic) UIToolbar* toolBar;
 @property (strong, nonatomic) WKWebView* webView;
 @property WKWebViewConfiguration* config;
+
+// UserAgent Properties
 @property NSString* customUserAgent;
 @property BOOL useCustomUserAgent;
+
+// Toolbar Buttons
+@property UIBarButtonItem* backButton;
+@property UIBarButtonItem* spaceItem;
+@property UIBarButtonItem* forwardButton;
 
 
 //METHODS
@@ -27,6 +35,10 @@
 -(void)refreshPage;
 
 -(void)setCustomUserAgent;
+
+-(void)pageBack;
+
+-(void)pageForward;
 
 
 @end
