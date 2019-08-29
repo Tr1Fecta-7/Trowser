@@ -19,26 +19,49 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    [self setupToolBar];
+    [self setupSearchBar];
+    [self setupWebView];
     
-    // searchBar setup
+}
+
+
+#pragma mark Setup
+
+-(void)setupWebView {
+    // Incognito Mode
+    self.config = [WKWebViewConfiguration new];
+    self.config.websiteDataStore = [WKWebsiteDataStore nonPersistentDataStore];
+    
+    // webView setup
+    self.webView = [[WKWebView alloc] initWithFrame:CGRectMake(0, 100, 414, 714) configuration:self.config];
+    self.webView.backgroundColor = [UIColor colorWithRed:0.96 green:0.95 blue:0.96 alpha:1.0];
+    
+    // Allow going page back/forward
+    self.webView.allowsBackForwardNavigationGestures = YES;
+    self.webView.navigationDelegate = self;
+    
+    [self.view addSubview:self.webView];
+}
+
+-(void)setupSearchBar {
     self.searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(20, 44, 374, 56)];
     self.searchBar.delegate = self;
     self.searchBar.searchBarStyle = UISearchBarStyleMinimal;
     self.searchBar.placeholder = @"URL or Search Query";
     self.searchBar.autocapitalizationType = NO;
     
-    
-    // toolBar setup
+    [self.view addSubview:self.searchBar];
+}
+
+-(void)setupToolBar {
     self.toolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 828, 414, 44)];
-    self.toolBar.hidden = NO;
-    
     
     // barButtons setup
     self.backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"backButton.png"] landscapeImagePhone:nil style:UIBarButtonItemStyleDone target:nil action:@selector(goBack)];
-
-    self.spaceItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    self.spaceItem.width = 50;
     
+    self.spaceItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    self.spaceItem.width = 70;
     
     self.forwardButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"forwardButton.png"] landscapeImagePhone:nil style:UIBarButtonItemStyleDone target:nil action:@selector(goForward)];
     
@@ -46,46 +69,7 @@
     
     [self.toolBar setItems:barButtons];
     
-    
-    
-    // Incognito Mode
-    self.config = [WKWebViewConfiguration new];
-    self.config.websiteDataStore = [WKWebsiteDataStore nonPersistentDataStore];
-    
-    
-    // webView setup
-    self.webView = [[WKWebView alloc] initWithFrame:CGRectMake(0, 100, 414, 714) configuration:self.config];
-    self.webView.backgroundColor = [UIColor colorWithRed:0.96 green:0.95 blue:0.96 alpha:1.0];
-    // Allow going page back/forward
-    self.webView.allowsBackForwardNavigationGestures = YES;
-    self.webView.navigationDelegate = self;
-
-    
-    // add to view
-    [self.view addSubview:self.searchBar];
     [self.view addSubview:self.toolBar];
-    [self.view addSubview:self.webView];
-}
-
-
-#pragma mark SearchBar
-
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    
-}
-
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-    
-    if (self.customUserAgent != nil) {
-        self.webView.customUserAgent = self.customUserAgent; 
-    }
-
-    [self.searchBar resignFirstResponder];
-    NSURL* url = [NSURL URLWithString:searchBar.text];
-    NSURLRequest* request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:5];
-    [self.webView loadRequest:request];
-    [self.searchBar setText:self.webView.URL.absoluteString];
-
 }
 
 
@@ -134,8 +118,28 @@
 }
 
 
+#pragma mark SearchBar
 
-#pragma mark takeScreenshot
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    
+}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    
+    if (self.customUserAgent != nil) {
+        self.webView.customUserAgent = self.customUserAgent;
+    }
+    
+    [self.searchBar resignFirstResponder];
+    NSURL* url = [NSURL URLWithString:searchBar.text];
+    NSURLRequest* request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:5];
+    [self.webView loadRequest:request];
+    [self.searchBar setText:self.webView.URL.absoluteString];
+    
+}
+
+#pragma mark Other Methods
+
 -(void)takeScreenshot {
     CGRect rect = CGRectMake(0, 100, 414, 762); // Size of webView
     UIGraphicsBeginImageContextWithOptions(rect.size, self.view.opaque, 0.0);
@@ -147,9 +151,6 @@
     // Save image to Photo Album
     UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil);
 }
-
-
-#pragma mark Other Methods
 
 -(void)refreshPage {
     [self.webView reload];
