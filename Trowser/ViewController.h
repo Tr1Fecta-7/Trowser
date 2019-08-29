@@ -22,6 +22,9 @@
 @property NSString* customUserAgent;
 @property BOOL useCustomUserAgent;
 
+// URL
+@property NSURL* requestURL;
+
 // Toolbar Buttons
 @property UIBarButtonItem* backButton;
 @property UIBarButtonItem* spaceItem;

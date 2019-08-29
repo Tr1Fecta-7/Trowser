@@ -129,10 +129,18 @@
     if (self.customUserAgent != nil) {
         self.webView.customUserAgent = self.customUserAgent;
     }
-    
     [self.searchBar resignFirstResponder];
-    NSURL* url = [NSURL URLWithString:searchBar.text];
-    NSURLRequest* request = [NSURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:5];
+    
+    
+    self.requestURL = [NSURL URLWithString:searchBar.text];
+    if (!self.requestURL) {
+        NSLog(@"INVALID LINK");
+    }
+    else if (!self.requestURL.scheme) {
+        self.requestURL = [NSURL URLWithString:[@"http://" stringByAppendingString:searchBar.text]];
+    }
+    
+    NSURLRequest* request = [NSURLRequest requestWithURL:self.requestURL cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:5];
     [self.webView loadRequest:request];
     [self.searchBar setText:self.webView.URL.absoluteString];
     
