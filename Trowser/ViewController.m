@@ -131,13 +131,20 @@
     }
     [self.searchBar resignFirstResponder];
     
-    
-    self.requestURL = [NSURL URLWithString:searchBar.text];
-    if (!self.requestURL) {
-        NSLog(@"INVALID LINK");
+    if ([searchBar.text containsString:@"/g "]) {
+        // remove "/g " from the string
+        NSString* searchQuery = [searchBar.text substringFromIndex:3];
+        [searchQuery stringByReplacingOccurrencesOfString:@" " withString:@"+"];
+        self.requestURL = [NSURL URLWithString:[@"https://google.com/search?q=" stringByAppendingString:searchQuery]];
     }
-    else if (!self.requestURL.scheme) {
-        self.requestURL = [NSURL URLWithString:[@"http://" stringByAppendingString:searchBar.text]];
+    else {
+        self.requestURL = [NSURL URLWithString:searchBar.text];
+        if (!self.requestURL) {
+            NSLog(@"INVALID LINK");
+        }
+        else if (!self.requestURL.scheme) {
+            self.requestURL = [NSURL URLWithString:[@"http://" stringByAppendingString:searchBar.text]];
+        }
     }
     
     NSURLRequest* request = [NSURLRequest requestWithURL:self.requestURL cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:5];
