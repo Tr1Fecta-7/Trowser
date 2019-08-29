@@ -77,11 +77,9 @@
 
 -(void)motionBegan:(UIEventSubtype)motion withEvent:(UIEvent *)event {
     if (motion == UIEventSubtypeMotionShake) {
-        
-        UIAlertController* alert = [UIAlertController
-        alertControllerWithTitle:@"Options"
-        message:nil
-        preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Options"
+            message:nil
+            preferredStyle:UIAlertControllerStyleAlert];
         
         UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
             style:UIAlertActionStyleDefault
