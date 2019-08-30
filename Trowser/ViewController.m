@@ -136,6 +136,14 @@
         self.requestURL = [NSURL URLWithString:[@"https://google.com/search?q=" stringByAppendingString:searchQuery]];
         [self executeRequest];
     }
+    
+    else if ([searchBar.text hasPrefix:@"!ddg "]) {
+        NSString* searchQuery = [searchBar.text substringFromIndex:5];
+        [searchQuery stringByReplacingOccurrencesOfString:@" " withString:@"+"];
+        self.requestURL = [NSURL URLWithString:[@"https://duckduckgo.com/?q=" stringByAppendingString:searchQuery]];
+        [self executeRequest];
+    }
+    
     else {
         self.requestURL = [NSURL URLWithString:searchBar.text];
         if (!self.requestURL) {
