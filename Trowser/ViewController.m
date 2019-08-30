@@ -129,11 +129,12 @@
     }
     [self.searchBar resignFirstResponder];
     
-    if ([searchBar.text containsString:@"/g "]) {
-        // remove "/g " from the string
+    if ([searchBar.text hasPrefix:@"!g "]) {
+        // remove "!g " from the string
         NSString* searchQuery = [searchBar.text substringFromIndex:3];
         [searchQuery stringByReplacingOccurrencesOfString:@" " withString:@"+"];
         self.requestURL = [NSURL URLWithString:[@"https://google.com/search?q=" stringByAppendingString:searchQuery]];
+        [self executeRequest];
     }
     else {
         self.requestURL = [NSURL URLWithString:searchBar.text];
@@ -144,10 +145,8 @@
             if (!self.requestURL.scheme) {
                 self.requestURL = [NSURL URLWithString:[@"http://" stringByAppendingString:searchBar.text]];
             }
+            [self executeRequest];
             
-            NSURLRequest* request = [NSURLRequest requestWithURL:self.requestURL cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:5];
-            [self.webView loadRequest:request];
-            [self.searchBar setText:self.webView.URL.absoluteString];
         }
     }
 }
@@ -168,6 +167,12 @@
 
 -(void)refreshPage {
     [self.webView reload];
+}
+
+-(void)executeRequest {
+    NSURLRequest* request = [NSURLRequest requestWithURL:self.requestURL cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:5];
+    [self.webView loadRequest:request];
+    [self.searchBar setText:self.webView.URL.absoluteString];
 }
 
 -(void)setCustomUserAgent {

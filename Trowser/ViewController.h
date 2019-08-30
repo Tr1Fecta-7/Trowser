@@ -37,6 +37,8 @@
 
 -(void)refreshPage;
 
+-(void)executeRequest;
+
 -(void)setCustomUserAgent;
 
 -(void)pageBack;
