@@ -79,7 +79,7 @@
     if (motion == UIEventSubtypeMotionShake) {
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Options"
             message:nil
-            preferredStyle:UIAlertControllerStyleAlert];
+        preferredStyle:UIAlertControllerStyleAlert];
         
         UIAlertAction* cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
             style:UIAlertActionStyleDefault
@@ -140,15 +140,16 @@
         if (!self.requestURL) {
             NSLog(@"INVALID LINK");
         }
-        else if (!self.requestURL.scheme) {
-            self.requestURL = [NSURL URLWithString:[@"http://" stringByAppendingString:searchBar.text]];
+        else {
+            if (!self.requestURL.scheme) {
+                self.requestURL = [NSURL URLWithString:[@"http://" stringByAppendingString:searchBar.text]];
+            }
+            
+            NSURLRequest* request = [NSURLRequest requestWithURL:self.requestURL cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:5];
+            [self.webView loadRequest:request];
+            [self.searchBar setText:self.webView.URL.absoluteString];
         }
     }
-    
-    NSURLRequest* request = [NSURLRequest requestWithURL:self.requestURL cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:5];
-    [self.webView loadRequest:request];
-    [self.searchBar setText:self.webView.URL.absoluteString];
-    
 }
 
 #pragma mark Other Methods
