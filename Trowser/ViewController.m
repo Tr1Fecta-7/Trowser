@@ -23,6 +23,15 @@
     [self setupSearchBar];
     [self setupWebView];
     
+    self.sEngineDict = @{
+        @"!g" : @"https://google.com/search?q=",
+        @"!ddg" : @"https://duckduckgo.com/?q=",
+        @"!sp" : @"https://www.startpage.com/do/search?q=",
+        @"!yt" : @"https://www.youtube.com/results?search_query=",
+        @"!bing" : @"https://www.bing.com/search?q=",
+        @"!yahoo" : @"https://search.yahoo.com/search?p=",
+        @"!wiki" : @"https://en.wikipedia.org/wiki/?search="
+        };
 }
 
 
@@ -129,28 +138,38 @@
     }
     [self.searchBar resignFirstResponder];
     
-    if ([searchBar.text hasPrefix:@"!g "]) {
-        // remove "!g " from the string
-        NSString* searchQuery = [searchBar.text substringFromIndex:3];
-        [searchQuery stringByReplacingOccurrencesOfString:@" " withString:@"+"];
-        self.requestURL = [NSURL URLWithString:[@"https://google.com/search?q=" stringByAppendingString:searchQuery]];
-        [self executeRequest];
-    }
+    // Separate searchBar text by space and put them into a NSArray
+    NSArray* searchTextWithEngineArray = [searchBar.text componentsSeparatedByString:@" "];
     
-    else if ([searchBar.text hasPrefix:@"!ddg "]) {
-        NSString* searchQuery = [searchBar.text substringFromIndex:5];
-        [searchQuery stringByReplacingOccurrencesOfString:@" " withString:@"+"];
-        self.requestURL = [NSURL URLWithString:[@"https://duckduckgo.com/?q=" stringByAppendingString:searchQuery]];
-        [self executeRequest];
-    }
+    // Get the searchEngine string (!<site>) and get the searchEngineURL from the dictionary
+    NSString* searchEngineString = searchTextWithEngineArray[0];
+    NSString* searchEngineURL = self.sEngineDict[searchEngineString];
     
+    // Check if the searchEngine is in the dict
+    if (searchEngineURL) {
+        
+        // Remove the searchEngine string from the Array and make a new Array from it
+        NSArray* searchTextArray = [searchTextWithEngineArray subarrayWithRange:NSMakeRange(1, searchTextWithEngineArray.count - 1)];
+        // Make a NSString from the subArray and join them with spaces
+        NSString* searchTextString = [searchTextArray componentsJoinedByString:@" "];
+        // Replace all spaces in the searchTextString with +'s to use in the URL
+        [searchTextString stringByReplacingOccurrencesOfString:@" " withString:@"+"];
+        
+        // Set the requestURL with the value from dict + the searchTextString and execute the request
+        self.requestURL = [NSURL URLWithString:[searchEngineURL stringByAppendingString:searchTextString]];
+        [self executeRequest];
+        
+    }
     else {
+        
         self.requestURL = [NSURL URLWithString:searchBar.text];
         if (!self.requestURL) {
             NSLog(@"INVALID LINK");
         }
         else {
             if (!self.requestURL.scheme) {
+                
+                // If there is no https or http in the url add http://
                 self.requestURL = [NSURL URLWithString:[@"http://" stringByAppendingString:searchBar.text]];
             }
             [self executeRequest];
