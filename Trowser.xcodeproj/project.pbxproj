@@ -13,8 +13,8 @@
 		5F0499C723115AF8007BD4FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F0499C623115AF8007BD4FE /* Assets.xcassets */; };
 		5F0499CA23115AF8007BD4FE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5F0499C823115AF8007BD4FE /* LaunchScreen.storyboard */; };
 		5F0499CD23115AF8007BD4FE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F0499CC23115AF8007BD4FE /* main.m */; };
-		5F6D4AC1231803BA00BC9CE8 /* forwardButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F6D4ABF231803BA00BC9CE8 /* forwardButton.png */; };
-		5F6D4AC2231803BA00BC9CE8 /* backButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 5F6D4AC0231803BA00BC9CE8 /* backButton.png */; };
+		5FFED7FF231C7FCA004BCAB0 /* backButton1.png in Resources */ = {isa = PBXBuildFile; fileRef = 5FFED7FD231C7FCA004BCAB0 /* backButton1.png */; };
+		5FFED800231C7FCA004BCAB0 /* forwardButton1.png in Resources */ = {isa = PBXBuildFile; fileRef = 5FFED7FE231C7FCA004BCAB0 /* forwardButton1.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,8 +28,8 @@
 		5F0499C923115AF8007BD4FE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5F0499CB23115AF8007BD4FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5F0499CC23115AF8007BD4FE /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		5F6D4ABF231803BA00BC9CE8 /* forwardButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = forwardButton.png; path = ../../../../Downloads/forwardButton.png; sourceTree = "<group>"; };
-		5F6D4AC0231803BA00BC9CE8 /* backButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = backButton.png; path = ../../../../Downloads/backButton.png; sourceTree = "<group>"; };
+		5FFED7FD231C7FCA004BCAB0 /* backButton1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = backButton1.png; sourceTree = "<group>"; };
+		5FFED7FE231C7FCA004BCAB0 /* forwardButton1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = forwardButton1.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,8 +62,8 @@
 		5F0499BC23115AF7007BD4FE /* Trowser */ = {
 			isa = PBXGroup;
 			children = (
-				5F6D4AC0231803BA00BC9CE8 /* backButton.png */,
-				5F6D4ABF231803BA00BC9CE8 /* forwardButton.png */,
+				5FFED7FD231C7FCA004BCAB0 /* backButton1.png */,
+				5FFED7FE231C7FCA004BCAB0 /* forwardButton1.png */,
 				5F0499BD23115AF7007BD4FE /* AppDelegate.h */,
 				5F0499BE23115AF7007BD4FE /* AppDelegate.m */,
 				5F0499C023115AF7007BD4FE /* ViewController.h */,
@@ -134,9 +134,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5FFED800231C7FCA004BCAB0 /* forwardButton1.png in Resources */,
+				5FFED7FF231C7FCA004BCAB0 /* backButton1.png in Resources */,
 				5F0499CA23115AF8007BD4FE /* LaunchScreen.storyboard in Resources */,
-				5F6D4AC1231803BA00BC9CE8 /* forwardButton.png in Resources */,
-				5F6D4AC2231803BA00BC9CE8 /* backButton.png in Resources */,
 				5F0499C723115AF8007BD4FE /* Assets.xcassets in Resources */,
 				5F0499C523115AF7007BD4FE /* Main.storyboard in Resources */,
 			);

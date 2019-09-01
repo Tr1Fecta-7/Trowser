@@ -23,6 +23,7 @@
     [self setupSearchBar];
     [self setupWebView];
     
+    // Setup the dictionary with all the urls and shortcuts
     self.sEngineDict = @{
         @"!g" : @"https://google.com/search?q=",
         @"!ddg" : @"https://duckduckgo.com/?q=",
@@ -31,7 +32,8 @@
         @"!bing" : @"https://www.bing.com/search?q=",
         @"!yahoo" : @"https://search.yahoo.com/search?p=",
         @"!wiki" : @"https://en.wikipedia.org/wiki/?search="
-        };
+    };
+    
 }
 
 
@@ -67,12 +69,12 @@
     self.toolBar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 828, 414, 44)];
     
     // barButtons setup
-    self.backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"backButton.png"] landscapeImagePhone:nil style:UIBarButtonItemStyleDone target:nil action:@selector(goBack)];
+    self.backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"backButton1.png"] landscapeImagePhone:nil style:UIBarButtonItemStyleDone target:nil action:@selector(goBack)];
     
     self.spaceItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    self.spaceItem.width = 70;
+    self.spaceItem.width = 20;
     
-    self.forwardButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"forwardButton.png"] landscapeImagePhone:nil style:UIBarButtonItemStyleDone target:nil action:@selector(goForward)];
+    self.forwardButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"forwardButton1.png"] landscapeImagePhone:nil style:UIBarButtonItemStyleDone target:nil action:@selector(goForward)];
     
     NSArray* barButtons = [[NSArray alloc] initWithObjects:self.backButton, self.spaceItem, self.forwardButton, nil];
     
@@ -128,7 +130,6 @@
 #pragma mark SearchBar
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-    
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {

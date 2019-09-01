@@ -17,8 +17,9 @@
 @property (strong, nonatomic) UIToolbar* toolBar;
 @property (strong, nonatomic) WKWebView* webView;
 @property WKWebViewConfiguration* config;
-@property NSDictionary* sEngineDict;
 
+// Dictionary
+@property NSDictionary* sEngineDict;
 
 // UserAgent Properties
 @property NSString* customUserAgent;
