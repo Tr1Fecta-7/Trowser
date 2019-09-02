@@ -23,6 +23,11 @@
     [self setupSearchBar];
     [self setupWebView];
     
+    [self.webView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.searchBar setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.toolBar setTranslatesAutoresizingMaskIntoConstraints:NO];
+    
+    
     // Setup the dictionary with all the urls and shortcuts
     self.sEngineDict = @{
         @"!g" : @"https://google.com/search?q=",
@@ -34,7 +39,45 @@
         @"!wiki" : @"https://en.wikipedia.org/wiki/?search="
     };
     
+    UISearchBar* searchBar1 = self.searchBar;
+    UIToolbar* toolBar1 = self.toolBar;
+    WKWebView* webView1 = self.webView;
+    
+    NSDictionary* views = NSDictionaryOfVariableBindings(webView1, searchBar1, toolBar1);
+    
+    
+    NSArray *searchBarHorizontalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-25-[searchBar1]-25-|" options:0 metrics:nil views:views];
+    
+    NSArray *searchBarVerticalConstraints =[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-40-[searchBar1(120)]-0-|" options:0 metrics:nil views:views];
+    
+    
+    NSArray *webViewHorizontalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[webView1]-0-|" options:0 metrics:nil views:views];
+    
+    NSArray *webViewVerticalConstraints =[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-100-[webView1]-0-[toolBar1]-|" options:0 metrics:nil views:views];
+    
+    
+    
+    NSArray *toolBarHorizontalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[toolBar1]-2-|" options:0 metrics:nil views:views];
+    
+    NSArray *toolBarVerticalConstraints =[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[searchBar1]-0-[toolBar1(40)]-20-|" options:0 metrics:nil views:views];
+    
+    
+    
+    
+    
+    
+    
+    // Add Constraints
+    [self.view addConstraints:searchBarHorizontalConstraints];
+    [self.view addConstraints:searchBarVerticalConstraints];
+    
+    [self.view addConstraints:webViewHorizontalConstraints];
+    [self.view addConstraints:webViewVerticalConstraints];
+    
+    [self.view addConstraints:toolBarHorizontalConstraints];
+    [self.view addConstraints:toolBarVerticalConstraints];
 }
+
 
 
 #pragma mark Setup
