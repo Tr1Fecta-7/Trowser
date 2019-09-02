@@ -10,5 +10,4 @@
 
 ### Planned features
 - Add bookmarks with custom shortcuts.
--
 
