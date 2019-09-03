@@ -306,7 +306,6 @@
     return [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
 }
 
-
 -(BOOL)ifNotchedDevice {
     NSString* deviceName = [self getMachineName];
     
