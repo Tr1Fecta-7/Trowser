@@ -260,7 +260,7 @@
 #pragma mark Other Methods
 
 -(void)takeScreenshot {
-    CGRect rect = CGRectMake(0, 100, 414, 762); // Size of webView
+    CGRect rect = CGRectMake(0, 100, self.webView.bounds.size.width, self.webView.bounds.size.height); // Size of webView
     UIGraphicsBeginImageContextWithOptions(rect.size, self.view.opaque, 0.0);
     CGContextRef context = UIGraphicsGetCurrentContext();
     [self.webView.layer renderInContext:context];
