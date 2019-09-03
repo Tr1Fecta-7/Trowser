@@ -48,6 +48,9 @@
 
 -(void)pageForward;
 
+-(NSString *)getMachineName;
+
+-(BOOL)ifNotchedDevice;
 
 // SETUP
 -(void)setupSearchBar;

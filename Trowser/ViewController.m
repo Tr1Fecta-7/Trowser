@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import <sys/utsname.h>
 
 @interface ViewController () <UISearchBarDelegate, WKNavigationDelegate>
 
@@ -23,6 +24,7 @@
     [self setupSearchBar];
     [self setupWebView];
     [self setupConstraints];
+    
     
     
     
@@ -109,9 +111,8 @@
     NSArray *searchBarHorizontalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-25-[searchBar1]-25-|" options:0 metrics:nil views:views];
      // Take a space from left side of the screen by 25 and from right side by 25
     
-    NSArray *searchBarVerticalConstraints =[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[searchBar1(120)]|" options:0 metrics:nil views:views]; // 120 to 100 for non notched devices
-    //Push searchBar down by 120
-    
+    // Check in if ([self ifNotchedDevice])
+    NSArray *searchBarVerticalConstraints;
     
     // Setup webView Constraints
     NSArray *webViewHorizontalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[webView1]-0-|" options:0 metrics:nil views:views];
@@ -126,9 +127,27 @@
     NSArray *toolBarHorizontalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[toolBar1]-2-|" options:0 metrics:nil views:views];
     // Don't take a space from left side of screen, only from the right side by 2
     
-    NSArray *toolBarVerticalConstraints =[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[searchBar1]-0-[toolBar1(40)]-20-|" options:0 metrics:nil views:views]; // -20- to -0- for non notched
-    // Push from the searchBar to under the webView by 40, then leave a space of 20
+    //Check in if ([self ifNotchedDevice])
+    NSArray *toolBarVerticalConstraints;
     
+    
+    // Check if the user is using a notched device for setting up constraints
+    if ([self ifNotchedDevice]) {
+        searchBarVerticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[searchBar1(130)]|" options:0 metrics:nil views:views]; // 120 to 100 for non notched devices
+        //Push searchBar down by 120
+        
+        
+        toolBarVerticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[searchBar1]-0-[toolBar1(50)]-20-|" options:0 metrics:nil views:views]; // -20- to -0- for non notched
+        // Push from the searchBar to under the webView by 40, then leave a space of 20
+    }
+    else {
+        searchBarVerticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[searchBar1(100)]|" options:0 metrics:nil views:views]; // 120 to 100 for non notched devices
+        //Push searchBar down by 100
+        
+        
+        toolBarVerticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[searchBar1]-0-[toolBar1(50)]-0-|" options:0 metrics:nil views:views]; // -20- to -0- for non notched
+        // Push from the searchBar to under the webView by 40, then leave a space of 0
+    }
     
     
     // Add Constraints to the view
@@ -140,6 +159,7 @@
     
     [self.view addConstraints:toolBarHorizontalConstraints];
     [self.view addConstraints:toolBarVerticalConstraints];
+
 }
 
 #pragma mark Shake Phone
@@ -251,10 +271,6 @@
     UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil);
 }
 
--(void)refreshPage {
-    [self.webView reload];
-}
-
 -(void)executeRequest {
     NSURLRequest* request = [NSURLRequest requestWithURL:self.requestURL cachePolicy:NSURLRequestReloadIgnoringLocalAndRemoteCacheData timeoutInterval:5];
     [self.webView loadRequest:request];
@@ -264,6 +280,10 @@
 -(void)setCustomUserAgent {
     UIPasteboard* pasteBoard = [UIPasteboard generalPasteboard];
     self.customUserAgent = pasteBoard.string;
+}
+
+-(void)refreshPage {
+    [self.webView reload];
 }
 
 -(void)pageBack {
@@ -276,6 +296,25 @@
     if (self.webView.canGoForward) {
         [self.webView goForward];
     }
+    
+}
+
+-(NSString *)getMachineName {
+    struct utsname systemInfo;
+    uname(&systemInfo);
+    
+    return [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
+}
+
+
+-(BOOL)ifNotchedDevice {
+    NSString* deviceName = [self getMachineName];
+    
+    return [deviceName isEqualToString:@"iPhone10,3"] || [deviceName isEqualToString:@"iPhone10,6"] // iPhone X
+    || [deviceName isEqualToString:@"iPhone11,2"] || [deviceName isEqualToString:@"iPhone11,4"] || [deviceName isEqualToString:@"iPhone11,6"]  // iPhone XS (Max)
+    || [deviceName isEqualToString:@"iPhone11,8"]; // iPhone XR
+
+    
     
 }
 
