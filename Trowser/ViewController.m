@@ -124,7 +124,7 @@
     
     // Setup toolBar constraints
     NSArray *toolBarHorizontalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[toolBar1]-2-|" options:0 metrics:nil views:views];
-    // Don't push from left side of screen, only right side by 2
+    // Don't take a space from left side of screen, only from the right side by 2
     
     NSArray *toolBarVerticalConstraints =[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[searchBar1]-0-[toolBar1(40)]-20-|" options:0 metrics:nil views:views]; // -20- to -0- for non notched
     // Push from the searchBar to under the webView by 40, then leave a space of 20
