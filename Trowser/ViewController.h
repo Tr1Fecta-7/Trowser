@@ -48,11 +48,14 @@
 
 -(void)pageForward;
 
+
 // SETUP
 -(void)setupSearchBar;
 
 -(void)setupToolBar;
 
 -(void)setupWebView;
+
+-(void)setupConstraints;
 
 @end

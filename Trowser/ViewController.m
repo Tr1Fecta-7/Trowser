@@ -22,10 +22,8 @@
     [self setupToolBar];
     [self setupSearchBar];
     [self setupWebView];
+    [self setupConstraints];
     
-    [self.webView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self.searchBar setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self.toolBar setTranslatesAutoresizingMaskIntoConstraints:NO];
     
     
     // Setup the dictionary with all the urls and shortcuts
@@ -39,43 +37,7 @@
         @"!wiki" : @"https://en.wikipedia.org/wiki/?search="
     };
     
-    UISearchBar* searchBar1 = self.searchBar;
-    UIToolbar* toolBar1 = self.toolBar;
-    WKWebView* webView1 = self.webView;
     
-    NSDictionary* views = NSDictionaryOfVariableBindings(webView1, searchBar1, toolBar1);
-    
-    
-    NSArray *searchBarHorizontalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-25-[searchBar1]-25-|" options:0 metrics:nil views:views];
-    
-    NSArray *searchBarVerticalConstraints =[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-40-[searchBar1(120)]-0-|" options:0 metrics:nil views:views];
-    
-    
-    NSArray *webViewHorizontalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[webView1]-0-|" options:0 metrics:nil views:views];
-    
-    NSArray *webViewVerticalConstraints =[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-100-[webView1]-0-[toolBar1]-|" options:0 metrics:nil views:views];
-    
-    
-    
-    NSArray *toolBarHorizontalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[toolBar1]-2-|" options:0 metrics:nil views:views];
-    
-    NSArray *toolBarVerticalConstraints =[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[searchBar1]-0-[toolBar1(40)]-20-|" options:0 metrics:nil views:views];
-    
-    
-    
-    
-    
-    
-    
-    // Add Constraints
-    [self.view addConstraints:searchBarHorizontalConstraints];
-    [self.view addConstraints:searchBarVerticalConstraints];
-    
-    [self.view addConstraints:webViewHorizontalConstraints];
-    [self.view addConstraints:webViewVerticalConstraints];
-    
-    [self.view addConstraints:toolBarHorizontalConstraints];
-    [self.view addConstraints:toolBarVerticalConstraints];
 }
 
 
@@ -126,6 +88,59 @@
     [self.view addSubview:self.toolBar];
 }
 
+-(void)setupConstraints {
+    
+    // Turn off auto resizing, so we can set our own constraints
+    [self.webView setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.searchBar setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.toolBar setTranslatesAutoresizingMaskIntoConstraints:NO];
+    
+    
+    // Make a variable out of the things for the NSDictionary
+    UISearchBar* searchBar1 = self.searchBar;
+    UIToolbar* toolBar1 = self.toolBar;
+    WKWebView* webView1 = self.webView;
+    
+    // Make a new NSDictionary with the views of the things
+    NSDictionary* views = NSDictionaryOfVariableBindings(webView1, searchBar1, toolBar1);
+    
+    
+    // Setup searchBar Constraints
+    NSArray *searchBarHorizontalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-25-[searchBar1]-25-|" options:0 metrics:nil views:views];
+     // Take a space from left side of the screen by 25 and from right side by 25
+    
+    NSArray *searchBarVerticalConstraints =[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[searchBar1(120)]|" options:0 metrics:nil views:views]; // 120 to 100 for non notched devices
+    //Push searchBar down by 120
+    
+    
+    // Setup webView Constraints
+    NSArray *webViewHorizontalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[webView1]-0-|" options:0 metrics:nil views:views];
+    // Don't take space from left/right side of screen
+    
+    
+    NSArray *webViewVerticalConstraints =[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-90-[webView1]-0-[toolBar1]-|" options:0 metrics:nil views:views];
+    // Push from searchBar by 90 down then webView is anchored to toolBar
+    
+    
+    // Setup toolBar constraints
+    NSArray *toolBarHorizontalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[toolBar1]-2-|" options:0 metrics:nil views:views];
+    // Don't push from left side of screen, only right side by 2
+    
+    NSArray *toolBarVerticalConstraints =[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[searchBar1]-0-[toolBar1(40)]-20-|" options:0 metrics:nil views:views]; // -20- to -0- for non notched
+    // Push from the searchBar to under the webView by 40, then leave a space of 20
+    
+    
+    
+    // Add Constraints to the view
+    [self.view addConstraints:searchBarHorizontalConstraints];
+    [self.view addConstraints:searchBarVerticalConstraints];
+    
+    [self.view addConstraints:webViewHorizontalConstraints];
+    [self.view addConstraints:webViewVerticalConstraints];
+    
+    [self.view addConstraints:toolBarHorizontalConstraints];
+    [self.view addConstraints:toolBarVerticalConstraints];
+}
 
 #pragma mark Shake Phone
 
