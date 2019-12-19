@@ -32,7 +32,13 @@
 @property UIBarButtonItem* backButton;
 @property UIBarButtonItem* spaceItem;
 @property UIBarButtonItem* forwardButton;
+@property UIBarButtonItem* addTabButton;
 
+// Cookie Array
+
+@property (strong, nonatomic) NSMutableArray<NSHTTPCookie *>* cookiesArray;
+
+@property (strong, nonatomic) NSDictionary* headersDictionary;
 
 //METHODS
 
@@ -41,6 +47,8 @@
 -(void)refreshPage;
 
 -(void)executeRequest;
+
+-(NSMutableArray *)getAllCookies;
 
 -(void)setCustomUserAgent;
 

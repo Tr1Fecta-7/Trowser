@@ -7,6 +7,8 @@
 //
 
 #import "ViewController.h"
+#import "CookiesTableViewController.h"
+#import "WKRequestInfoTableViewController.h"
 #import <sys/utsname.h>
 
 @interface ViewController () <UISearchBarDelegate, WKNavigationDelegate>
@@ -20,11 +22,13 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    
     [self setupToolBar];
     [self setupSearchBar];
     [self setupWebView];
     [self setupConstraints];
     
+    self.cookiesArray = [NSMutableArray new];
     
     
     
@@ -52,7 +56,7 @@
     self.config.websiteDataStore = [WKWebsiteDataStore nonPersistentDataStore];
     
     // webView setup
-    self.webView = [[WKWebView alloc] initWithFrame:CGRectMake(0, 100, 414, 714) configuration:self.config];
+    self.webView = [[WKWebView alloc] initWithFrame:CGRectMake(0, 100, [UIScreen mainScreen].bounds.size.width, 714) configuration:self.config];
     self.webView.backgroundColor = [UIColor colorWithRed:0.96 green:0.95 blue:0.96 alpha:1.0];
     
     // Allow going page back/forward
@@ -60,6 +64,7 @@
     self.webView.navigationDelegate = self;
     
     [self.view addSubview:self.webView];
+    
 }
 
 -(void)setupSearchBar {
@@ -68,6 +73,8 @@
     self.searchBar.searchBarStyle = UISearchBarStyleMinimal;
     self.searchBar.placeholder = @"URL or Search Query";
     self.searchBar.autocapitalizationType = NO;
+    
+    
     
     [self.view addSubview:self.searchBar];
 }
@@ -83,7 +90,9 @@
     
     self.forwardButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"forwardButton1.png"] landscapeImagePhone:nil style:UIBarButtonItemStyleDone target:nil action:@selector(goForward)];
     
-    NSArray* barButtons = [[NSArray alloc] initWithObjects:self.backButton, self.spaceItem, self.forwardButton, nil];
+    self.addTabButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:nil action:nil];
+    
+    NSArray* barButtons = [[NSArray alloc] initWithObjects:self.backButton, self.spaceItem, self.forwardButton, self.spaceItem, self.addTabButton, nil];
     
     [self.toolBar setItems:barButtons];
     
@@ -102,6 +111,7 @@
     UISearchBar* searchBar1 = self.searchBar;
     UIToolbar* toolBar1 = self.toolBar;
     WKWebView* webView1 = self.webView;
+    
     
     // Make a new NSDictionary with the views of the things
     NSDictionary* views = NSDictionaryOfVariableBindings(webView1, searchBar1, toolBar1);
@@ -133,15 +143,15 @@
     
     // Check if the user is using a notched device for setting up constraints
     if ([self ifNotchedDevice]) {
-        searchBarVerticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[searchBar1(130)]|" options:0 metrics:nil views:views]; // 120 to 100 for non notched devices
-        //Push searchBar down by 120
+        searchBarVerticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[searchBar1(130)]|" options:0 metrics:nil views:views]; // 130 to 100 for non notched devices
+        //Push searchBar down by 130
         
         
         toolBarVerticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[searchBar1]-0-[toolBar1(50)]-20-|" options:0 metrics:nil views:views]; // -20- to -0- for non notched
         // Push from the searchBar to under the webView by 40, then leave a space of 20
     }
     else {
-        searchBarVerticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[searchBar1(100)]|" options:0 metrics:nil views:views]; // 120 to 100 for non notched devices
+        searchBarVerticalConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[searchBar1(100)]|" options:0 metrics:nil views:views]; // 130 to 100 for non notched devices
         //Push searchBar down by 100
         
         
@@ -182,6 +192,23 @@
             }];
         
         
+        UIAlertAction* showAllCookiesAction = [UIAlertAction actionWithTitle:@"Show Request Data"
+            style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+            
+                WKRequestInfoTableViewController *reqInfoTableViewController = [WKRequestInfoTableViewController new];
+                reqInfoTableViewController.cookiesArray = [self getAllCookies];
+                reqInfoTableViewController.headersDictionary = self.headersDictionary;
+                reqInfoTableViewController.requestInfoArray = [[NSMutableArray alloc] initWithObjects:@"Cookies", @"Headers", nil];
+                
+                UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:nil action:nil];
+                reqInfoTableViewController.navigationItem.backBarButtonItem = backBarButtonItem;
+                
+            
+                UINavigationController* navController = [[UINavigationController alloc] initWithRootViewController:reqInfoTableViewController];
+                [self presentViewController:navController animated:YES completion:nil];
+             }];
+        
+        
         UIAlertAction* screenshotAction = [UIAlertAction actionWithTitle:@"Screenshot"
             style:UIAlertActionStyleDefault
             handler:^(UIAlertAction * action) {
@@ -195,14 +222,17 @@
             }];
         
         
+        
         [alert addAction:cancelAction];
         [alert addAction:refreshAction];
         [alert addAction:customUserAgentAction];
+        [alert addAction:showAllCookiesAction];
         [alert addAction:screenshotAction];
         
         [self presentViewController:alert animated:YES completion:nil];
     }
 }
+
 
 
 #pragma mark SearchBar
@@ -223,6 +253,8 @@
     // Get the searchEngine string (!<site>) and get the searchEngineURL from the dictionary
     NSString* searchEngineString = searchTextWithEngineArray[0];
     NSString* searchEngineURL = self.sEngineDict[searchEngineString];
+    
+    
     
     // Check if the searchEngine is in the dict
     if (searchEngineURL) {
@@ -277,7 +309,30 @@
     [self.searchBar setText:self.webView.URL.absoluteString];
 }
 
+
+-(NSMutableArray *)getAllCookies {
+    NSMutableArray* cookiesArray = [NSMutableArray new];
+    
+    WKHTTPCookieStore* cookieStore = self.webView.configuration.websiteDataStore.httpCookieStore;
+    [cookieStore getAllCookies:^(NSArray<NSHTTPCookie *> * _Nonnull cookies) {
+        
+        for (NSHTTPCookie* cookie in cookies) {
+            [cookiesArray addObject:cookie];
+        }
+    }];
+    
+    return cookiesArray;
+}
+
+- (void)webView:(WKWebView *)webView decidePolicyForNavigationResponse:(WKNavigationResponse *)navigationResponse decisionHandler:(void (^)(WKNavigationResponsePolicy))decisionHandler {
+    self.headersDictionary = ((NSHTTPURLResponse *)navigationResponse.response).allHeaderFields;
+    
+    decisionHandler(WKNavigationResponsePolicyAllow);
+}
+
+
 -(void)setCustomUserAgent {
+    // Get the clipboard and use the string from clipboard as UserAgent
     UIPasteboard* pasteBoard = [UIPasteboard generalPasteboard];
     self.customUserAgent = pasteBoard.string;
 }
